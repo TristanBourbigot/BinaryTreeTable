@@ -128,7 +128,7 @@ public class BinaryTreeTableTest {
 			System.out.println(tree2.toString());
 
 			assertEquals("","\ncle=10\tdata=10\ncle=15\tdata=15\ncle=20\tdata=20\ncle=25\tdata=25\ncle=30\tdata=30\ncle=35\tdata=35\ncle=40\tdata=40",tree.toString());
-		    assertEquals("","\ncle=10\tdata=10\ncle=15\tdata=15\ncle=20\tdata=20\ncle=25\tdata=25\ncle=30\tdata=30\ncle=35\tdata=35\ncle=40\tdata=40",tree2.toString());
+		    assertEquals("","\ncle=5\tdata=5\ncle=10\tdata=10\ncle=15\tdata=15\ncle=20\tdata=20\ncle=25\tdata=25\ncle=30\tdata=30\ncle=35\tdata=35\ncle=40\tdata=40",tree2.toString());
 		   
 	    }catch(Exception e) {
 	        fail("Error - BinaryTreeTableTest testDelete - "+ e.getMessage());
@@ -162,7 +162,7 @@ public class BinaryTreeTableTest {
 			tree2.insert(35,"35");
 			tree2.insert(20, "20");
 			tree2.showTree();
-			Thread.sleep(100000);
+			Thread.sleep(10000);
 
 
 
