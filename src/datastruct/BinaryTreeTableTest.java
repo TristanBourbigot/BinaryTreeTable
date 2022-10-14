@@ -77,6 +77,7 @@ public class BinaryTreeTableTest {
 	@Test
 	public void testDelete() {
 		BinaryTreeTable<String, Integer> tree = new BinaryTreeTable<String, Integer>();
+		BinaryTreeTable<String, Integer> tree2 = new BinaryTreeTable<String, Integer>();
 		try{
 			tree.insert(25, "25");
 			tree.insert(15, "15");
@@ -85,20 +86,38 @@ public class BinaryTreeTableTest {
 			tree.insert(20, "20");
 			tree.insert(30, "30");
 			tree.insert(40, "40");
-			
+			tree2.insert(100, "first");
+			tree2.insert(130, "second");
+			tree2.insert(115, "third");
+			tree2.insert(70, "fourth");
+			tree2.insert(85, "fifth");
+			tree2.insert(145, "six");
+			tree2.insert(160, "seventh");
+			tree2.insert(55, "eigth");
+			tree2.insert(40, "ninth");
+		
 			assertTrue(tree.delete(10));
 			assertTrue(tree.delete(40));
 			assertTrue(tree.delete(15));
 			assertTrue(tree.delete(25));
 			assertTrue(tree.delete(35));
-			assertTrue(tree.select(20).equals("20"));
+			assertTrue(tree.delete(20));
 
+			
+			assertTrue(tree2.delete(160));
+			assertTrue(tree2.delete(55));
+			assertTrue(tree2.delete(40));
+			assertTrue(tree2.delete(130));
+			assertTrue(tree2.delete(145));
+			assertTrue(tree2.delete(70));
 			assertFalse(tree.delete(10));
 
 			}catch(Exception e){
 				fail("Error - BinaryTreeTableTest testDelete - " + e.getMessage());
 			}
 	}
+
+	
 
 	@Test
 	public void testToString() {

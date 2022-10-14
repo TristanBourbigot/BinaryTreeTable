@@ -31,6 +31,7 @@ public class BinaryTreeTable<T,E extends Comparable<E>> implements Table<T, E> {
 		if(key == null) throw new IllegalArgumentException("Error - BinaryTreeTable select - key is null");
 		
 		Node node = this.findNode(root,key);
+		System.out.println(node);
 		T ret = null;
 		if(node != null) ret = node.theValue;
 		return ret;
@@ -79,7 +80,7 @@ public class BinaryTreeTable<T,E extends Comparable<E>> implements Table<T, E> {
 	public boolean delete(E key) {
 		boolean res = false;
 		Node node = this.findNode(root,key);
-		if(node!=null){
+		if(node!=null && this.select(key)!=null){
 			this.delete(node);
 			if(this.select(key)==null){
 				res = true;
@@ -94,23 +95,63 @@ public class BinaryTreeTable<T,E extends Comparable<E>> implements Table<T, E> {
 	 * @return true if the node was deleted
 	 */
 	private void delete(Node theNode){
-		if(theNode.lSon == null && theNode.rSon == null){
+		if(root==theNode){
+			if(theNode.lSon==null && theNode.rSon==null){
+				root = null;
+			}else if(theNode.lSon==null){
+				root = theNode.rSon;
+				root.father = null;
+			}else if(theNode.rSon==null){
+				root = theNode.lSon;
+				root.father = null;
+			}else{
+				Node node = theNode.rSon;
+				while(node.lSon!=null){
+					node = node.lSon;
+				}
+				if(node.father!=theNode){
+					node.father.lSon = node.rSon;
+					if(node.rSon!=null){
+						node.rSon.father = node.father;
+					}
+					node.rSon = theNode.rSon;
+					node.rSon.father = node;
+				}
+				node.lSon = theNode.lSon;
+				node.lSon.father = node;
+				root = node;
+				root.father = null;
+			}
+		}
+		else if(theNode.lSon == null && theNode.rSon == null){
 			if(theNode.father.lSon == theNode){
 				theNode.father.lSon = null;
+				theNode.father = null;
 			}else if(theNode.father.rSon == theNode){
 				theNode.father.rSon = null;
+				theNode.father = null;
 			}
 		}else if(theNode.lSon == null && theNode.rSon != null){
 			if(theNode.father.lSon == theNode){
 				theNode.father.lSon = theNode.rSon;
+				theNode.rSon.father = theNode.father;
+				theNode.father = null;
+				theNode.rSon = null;
 			}else if(theNode.father.rSon == theNode){
 				theNode.father.rSon = theNode.rSon;
+				theNode.rSon.father = theNode.father;
+				theNode.father = null;
+				theNode.rSon = null;
 			}
 		}else if(theNode.lSon != null && theNode.rSon == null){
 			if(theNode.father.lSon == theNode){
 				theNode.father.lSon = theNode.lSon;
+				theNode.lSon.father = theNode.father;
+				theNode.father = null;
 			}else if(theNode.father.rSon == theNode){
 				theNode.father.rSon = theNode.lSon;
+				theNode.lSon.father = theNode.father;
+				theNode.father = null;
 			}
 		}else if(theNode.lSon != null && theNode.rSon != null){
 			Node rs = theNode.lSon;
@@ -119,8 +160,15 @@ public class BinaryTreeTable<T,E extends Comparable<E>> implements Table<T, E> {
 			}
 			theNode.key = rs.key;
 			theNode.theValue = rs.theValue;
-			this.balanceTheTree(root);
 			this.delete(rs);
+		}
+		
+		if(root!=null && theNode.father!=null){
+			Node f = theNode.father;
+			while(f!=null){
+				this.balanceTheTree(f);
+				f = f.father;
+			}
 		}
 	}
 
@@ -134,7 +182,7 @@ public class BinaryTreeTable<T,E extends Comparable<E>> implements Table<T, E> {
 	private Node findNode ( Node theNode, E key ){
 		Node res;
 		if(theNode == null) res= null;
-		else if(theNode.key == key) res = theNode;
+		else if(theNode.key.compareTo(key)==0) res = theNode;
 		else if(theNode.key.compareTo(key) > 0) res = findNode(theNode.lSon, key);
 		else res = findNode(theNode.rSon, key);
 		return res;
@@ -404,6 +452,9 @@ public class BinaryTreeTable<T,E extends Comparable<E>> implements Table<T, E> {
 			return this.rSon;
 		}
 		
+		public Node getFather(){
+			return this.father;
+		}
 		
 		/**
 		 * clone the node
