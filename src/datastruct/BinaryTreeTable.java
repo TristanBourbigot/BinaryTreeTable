@@ -83,7 +83,6 @@ public class BinaryTreeTable<T,E extends Comparable<E>> implements Table<T, E> {
 			this.delete(node);
 			if(this.select(key)==null){
 				res = true;
-				if(root!=null && root.lSon!=null && root.rSon!=null) this.balanceTheTree(root);
 			}
 		}
 		return res;
@@ -120,6 +119,7 @@ public class BinaryTreeTable<T,E extends Comparable<E>> implements Table<T, E> {
 			}
 			theNode.key = rs.key;
 			theNode.theValue = rs.theValue;
+			this.balanceTheTree(root);
 			this.delete(rs);
 		}
 	}
